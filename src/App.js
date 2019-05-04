@@ -19,7 +19,7 @@ class App extends Component {
   handleClick = event => {
     const isRight = this.state.correct_answer;
     this.setState({
-      score: (isRight ? this.state.score + 1 : this.state.score),
+      score: this.state.score + 1,
       correct_answer: event.target.value,
       incorrect_answers: event.target.value
     });
