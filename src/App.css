@@ -18,3 +18,8 @@ button {
   font-size: 24px;
   margin: 0px 80px 0px 100px;
 }
+
+.correctAnswer {
+  font-weight: bold;
+  color: red;
+}

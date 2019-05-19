@@ -9,12 +9,9 @@ class App extends Component {
     super(props);
 
     this.state = {
-      list: [
-        this.props.correct_answer,
-        this.props.incorrect_answers
-      ],
+      question: "",
       results: [],
-      isShowing: false
+      score: 0
     };
   }
 
@@ -22,10 +19,7 @@ class App extends Component {
 
   handleClick = event => {
     this.setState({
-      isShowing: true,
       score: this.state.score + 1,
-      correct_answer: event.target.value,
-      incorrect_answers: event.target.value
     });
   };
 
@@ -41,13 +35,12 @@ class App extends Component {
   }
 
   render() {
-
     const results = this.state.results.slice().map((result, index) => (
       <ul onClick={this.handleClick.bind(this)} key={`result ${index}`}>
         <li>
           <h2> {result.question}</h2>
           {""}
-          <h5>{result.correct_answer}</h5>
+          <h5 className="correctAnswer">{result.correct_answer}</h5>
         </li>
         {result.incorrect_answers.map(incAnswer => (
           <li>
@@ -61,17 +54,9 @@ class App extends Component {
       <div className="App">
         <h1>Quiz App</h1>
         <div>{results[Math.floor(Math.random() * results.length)]}</div>
-        <div>Score: {this.state.score}</div>
-        {this.state.isShowing && (
-          <Counter
-            className="modal"
-            show={this.state.isShowing}
-            question={this.state.question}
-            correct_answer={this.state.correct_answer}
-          />
-        )}
-        <Counter questions={this.state.question}
-        // [{question, correct_answer, incorrect_answers }, /*...*/]} 
+        <TheCounter question={this.state.question}
+          score={this.state.score}
+          right={this.state.right}
         />
       </div>
     );
@@ -79,11 +64,10 @@ class App extends Component {
 }
 
 
-class TheAnswers extends Component {
+class MythologyAnswers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      correct_answer: "",
       answered: undefined, isRight: undefined
     };
   }
@@ -91,7 +75,7 @@ class TheAnswers extends Component {
     const { hasAnswered, correct_answer } = this.props;
     return event => {
       if (this.state.answered) return;
-      const isRight = correct_answer === answer;
+      const isRight = correct_answer === correct_answer;
       hasAnswered(isRight);
       this.setState({ answered: answer, isRight });
     }
@@ -113,33 +97,33 @@ class TheAnswers extends Component {
 }
 
 
-class Counter extends Component {
+class TheCounter extends Component {
   constructor(props) {
     super(props);
     this.state = {
       right: 0,
-      counter: 0
+      score: 0,
     };
 
   }
   questionAnswered(isRight) {
-    this.setState(({ counter, right }) => ({ counter: counter + 1, right: right + isRight }));
+    this.setState(({ score, right }) => ({ score: score + 1, right: right + isRight }));
   }
 
   render() {
-    const { questions } = this.props;
-    const { counter, right } = this.state;
-    const unanswered = this.props.questions - counter;
+    const { question } = this.props;
+    const { score, right } = this.state;
+    const unanswered = this.props.question - score;
     if (unanswered <= 0) {
-      return `All answered`;
+      return 'They are all answered';
     }
 
     return (
       <div>
         You have {unanswered} questions left, {right} are already correct!
-      {questions.map(it => <TheAnswers key={it.question} {...it}
+      {question.map(i => <MythologyAnswers key={i.question} {...i}
           hasAnswered={it => this.questionAnswered(it)} />)}
-        <div>{this.state.counter}</div>
+        <div>Score: {this.state.score}</div>
       </div>
     )
   }
