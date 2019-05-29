@@ -19,7 +19,20 @@ button {
   margin: 0px 80px 0px 100px;
 }
 
+.newQuestion {
+  margin: 50px;
+}
+
 .correctAnswer {
-  font-weight: bold;
+  color: green;
+  font-weight: bolder;
+}
+
+.incorrectAnswer {
   color: red;
+  font-weight: bolder;
+}
+
+.countAnswers {
+  font-size: 30px;
 }

@@ -7,123 +7,94 @@ const API =
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      question: "",
       results: [],
-      score: 0
+      score: []
     };
   }
-
-
-
-  handleClick = event => {
-    this.setState({
-      score: this.state.score + 1,
-    });
-  };
 
   componentDidMount() {
     this.populateAppWithData();
   }
 
   populateAppWithData() {
-    const showData = fetch(API)
+    fetch(API)
       .then(response => response.json())
       .then(data => this.setState({ results: data.results }));
-    console.log(showData);
   }
 
   render() {
-    const results = this.state.results.slice().map((result, index) => (
-      <ul onClick={this.handleClick.bind(this)} key={`result ${index}`}>
-        <li>
-          <h2> {result.question}</h2>
-          {""}
-          <h5 className="correctAnswer">{result.correct_answer}</h5>
-        </li>
-        {result.incorrect_answers.map(incAnswer => (
-          <li>
-            <h5>{incAnswer}</h5>
-          </li>
-        ))}
-      </ul>
-    ));
-
+    const { results } = this.state;
     return (
       <div className="App">
         <h1>Quiz App</h1>
-        <div>{results[Math.floor(Math.random() * results.length)]}</div>
-        <TheCounter question={this.state.question}
-          score={this.state.score}
-          right={this.state.right}
+        <TheCounter results={results}
+          Counter={this.state.score}
+          right={this.state.correct_answer}
         />
       </div>
     );
   }
 }
-
-
 class MythologyAnswers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      answered: undefined, isRight: undefined
+      answered: "",
+      isRight: null
     };
   }
   answerClicked(answer) {
     const { hasAnswered, correct_answer } = this.props;
     return event => {
-      if (this.state.answered) return;
-      const isRight = correct_answer === correct_answer;
+      const isRight = correct_answer === answer;
       hasAnswered(isRight);
       this.setState({ answered: answer, isRight });
-    }
+    };
   }
 
   render() {
     const { question, correct_answer, incorrect_answers } = this.props;
     const { answered, isRight } = this.state;
     return (
-      <div>{question}
-        {[...incorrect_answers, correct_answer]
-          .map(answer => <div onClick={this.answerClicked(answer)}>{answer} </div>)}
-        {answered && `You answered ${answered}`}
-        {answered && isRight && "This is correct!"}
-        {answered && !isRight && "This is incorrect. please try again"}
+      <div className="newQuestion">
+        {question}
+        {incorrect_answers && incorrect_answers
+          .concat(correct_answer)
+          .map(answer => (<div onClick={this.answerClicked(answer)}>{answer} </div>))} <br />
+        {answered && `You answered ${answered}`} <br />
+        <div className="correctAnswer"> {" "}{answered && isRight && "This is correct!"} {" "} </div>
+        <div className="incorrectAnswer"> {" "}{answered && !isRight && "This is incorrect. please try again"} {" "}</div>
       </div>
     )
   }
 }
-
 
 class TheCounter extends Component {
   constructor(props) {
     super(props);
     this.state = {
       right: 0,
-      score: 0,
+      Counter: 0,
+      unanswered: 0
     };
 
   }
-  questionAnswered(isRight) {
-    this.setState(({ score, right }) => ({ score: score + 1, right: right + isRight }));
+  questionAnswered = isRight => {
+    this.setState(({ Counter, right }) => ({ Counter: Counter + 1, right: right + isRight }));
   }
 
   render() {
-    const { question } = this.props;
-    const { score, right } = this.state;
-    const unanswered = this.props.question - score;
-    if (unanswered <= 0) {
-      return 'They are all answered';
+    const { results } = this.props;
+    const { Counter } = this.state;
+    const unanswered = this.props.results && Counter;
+    if (unanswered >= 10) {
+      return `You got ${this.state.right} right out of ${this.state.Counter}`;
     }
-
+    const question = results[Counter];
     return (
-      <div>
-        You have {unanswered} questions left, {right} are already correct!
-      {question.map(i => <MythologyAnswers key={i.question} {...i}
-          hasAnswered={it => this.questionAnswered(it)} />)}
-        <div>Score: {this.state.score}</div>
+      <div className="newQuestion">
+        <MythologyAnswers {...question} hasAnswered={this.questionAnswered} />
       </div>
     )
   }
