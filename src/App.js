@@ -64,7 +64,7 @@ class MythologyAnswers extends Component {
           .map(answer => (<div onClick={this.answerClicked(answer)}>{answer} </div>))}<br />
         {answered && `You answered ${answered}`} <br />
         <div className="correctAnswer"> {" "}{answered && isRight && "This is correct!"} </div> <br />
-        <div className="incorrectAnswer"> {" "}{answered && !isRight && "This is incorrect. please try again"} {" "}</div>
+        <div className="incorrectAnswer"> {" "}{answered && !isRight && `This is incorrect. The correct answer is ${this.props.correct_answer}`} {" "}</div>
       </div>
     )
   }
