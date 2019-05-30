@@ -61,9 +61,9 @@ class MythologyAnswers extends Component {
         {question}
         {incorrect_answers && incorrect_answers
           .concat(correct_answer)
-          .map(answer => (<div onClick={this.answerClicked(answer)}>{answer} </div>))} <br />
+          .map(answer => (<div onClick={this.answerClicked(answer)}>{answer} </div>))}<br />
         {answered && `You answered ${answered}`} <br />
-        <div className="correctAnswer"> {" "}{answered && isRight && "This is correct!"} {" "} </div>
+        <div className="correctAnswer"> {" "}{answered && isRight && "This is correct!"} </div> <br />
         <div className="incorrectAnswer"> {" "}{answered && !isRight && "This is incorrect. please try again"} {" "}</div>
       </div>
     )
@@ -89,7 +89,7 @@ class TheCounter extends Component {
     const { Counter } = this.state;
     const unanswered = this.props.results && Counter;
     if (unanswered >= 10) {
-      return `You got ${this.state.right} right out of ${this.state.Counter}`;
+      return <div className="theUnanswered"> You got {this.state.right} right out of {this.state.Counter} </div>;
     }
     const question = results[Counter];
     return (

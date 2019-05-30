@@ -36,3 +36,7 @@ button {
 .countAnswers {
   font-size: 30px;
 }
+
+.theUnanswered {
+  font-size: 50px;
+}
