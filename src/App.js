@@ -57,7 +57,7 @@ class MythologyAnswers extends Component {
     const { question, correct_answer, incorrect_answers } = this.props;
     const { answered, isRight } = this.state;
     return (
-      <div className="newQuestion">
+      <div className="allAnswers">
         {question}
         {incorrect_answers && incorrect_answers
           .concat(correct_answer)
