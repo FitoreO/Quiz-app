@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 
 const API =
-  "https://opentdb.com/api.php?amount=10&category=20&difficulty=medium";
+  "https://opentdb.com/api.php?amount=10";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      category: "",
+      difficulty: "",
       results: [],
       score: []
     };
@@ -24,15 +26,22 @@ class App extends Component {
       .catch(error => console.error(error))
   }
 
+  sortCategories(event) {
+    event.preventDefault();
+    this.setState({
+
+    })
+  }
 
   render() {
-    const { results } = this.state;
+    const { results, category } = this.state;
     return (
       <div className="App">
         <h1>Quiz App</h1>
         <TheCounter results={results}
           Counter={this.state.score}
         />
+        {/* <button onClick={this.state.category}>Category</button> */}
       </div>
     );
   }
@@ -85,11 +94,12 @@ class MythologyAnswers extends Component {
           ))}<br />
         {answered && `You answered ${answered}`} {" "} <br />
         <div className="correctAnswer"> {" "}{answered && isRight && "This is correct!"} </div> <br />
-        <div className="incorrectAnswer"> {" "}{answered && !isRight && `This is incorrect. The correct answer is ${this.props.correct_answer}`} {" "}</div>
+        <div className="incorrectAnswer"> {" "}{answered && !isRight && `This is incorrect.`} {" "}</div>
       </div>
     )
   }
 }
+
 class TheCounter extends Component {
   constructor(props) {
     super(props);
@@ -116,6 +126,7 @@ class TheCounter extends Component {
     return (
       <div className="newQuestion">
         <MythologyAnswers {...question} hasAnswered={this.questionAnswered} />
+
       </div>
     )
   }
